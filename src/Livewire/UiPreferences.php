@@ -5,10 +5,18 @@ declare(strict_types=1);
 namespace Andreia\FilamentUiSwitcher\Livewire;
 
 use Andreia\FilamentUiSwitcher\Support\UiPreferenceManager;
+use Filament\Actions\Action;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Schemas\Concerns\InteractsWithSchemas;
+use Filament\Schemas\Contracts\HasSchemas;
 use Livewire\Component;
 
-final class UiPreferences extends Component
+final class UiPreferences extends Component implements HasActions, HasSchemas
 {
+    use InteractsWithActions;
+    use InteractsWithSchemas;
+
     public string $font = 'Inter';
 
     public string $layout = 'sidebar';
@@ -129,6 +137,20 @@ final class UiPreferences extends Component
     {
         return config('ui-switcher.font_size_range', ['min' => 12, 'max' => 20]);
     }
+
+    public function resetAction(): Action
+    {
+        return Action::make('reset')
+            ->color('secondary')
+            ->label(__('filament-ui-switcher::filament-ui-switcher.reset.button'))
+            ->extraAttributes([
+                'aria-label' =>  __('filament-ui-switcher::filament-ui-switcher.reset.aria_label'),
+            ])
+            ->icon('heroicon-o-arrow-path')
+            ->requiresConfirmation()
+            ->action(fn() => $this->resetToDefaults());
+    }
+
 
     public function render()
     {
