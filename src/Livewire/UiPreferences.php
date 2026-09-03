@@ -9,8 +9,6 @@ use Livewire\Component;
 
 final class UiPreferences extends Component
 {
-    public bool $open = false;
-
     public string $font = 'Inter';
 
     public string $layout = 'sidebar';
@@ -31,24 +29,6 @@ final class UiPreferences extends Component
         $this->primaryColor = UiPreferenceManager::get('ui.color', '#6366f1');
         $this->fontSize = UiPreferenceManager::get('ui.font_size', 16);
         $this->density = UiPreferenceManager::get('ui.density', 'default');
-    }
-
-    public function toggle(): void
-    {
-        $this->open = ! $this->open;
-
-        // Dispatch Filament modal events
-        if ($this->open) {
-            $this->dispatch('open-modal', id: 'ui-switcher-modal');
-        } else {
-            $this->dispatch('close-modal', id: 'ui-switcher-modal');
-        }
-    }
-
-    public function closeModal(): void
-    {
-        $this->open = false;
-        $this->dispatch('close-modal', id: 'ui-switcher-modal');
     }
 
     public function setFont(string $font): void
