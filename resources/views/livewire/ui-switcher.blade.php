@@ -34,7 +34,6 @@
         </x-slot>
 
         <x-slot name="header">
-
             {{-- Header content --}}
             <div class="flex items-center gap-2">
                 <x-filament::icon
