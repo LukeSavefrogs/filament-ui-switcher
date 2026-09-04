@@ -12,6 +12,7 @@
         slide-over
         close-button
         width="md"
+        :autofocus="false"
     >
         {{-- Cog icon in topbar/sidebar --}}
         <x-slot name="trigger">
