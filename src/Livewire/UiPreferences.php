@@ -141,7 +141,8 @@ final class UiPreferences extends Component implements HasActions, HasSchemas
     public function resetAction(): Action
     {
         return Action::make('reset')
-            ->color('secondary')
+            ->color('warning')
+            ->link()
             ->label(__('filament-ui-switcher::filament-ui-switcher.reset.button'))
             ->extraAttributes([
                 'aria-label' =>  __('filament-ui-switcher::filament-ui-switcher.reset.aria_label'),
