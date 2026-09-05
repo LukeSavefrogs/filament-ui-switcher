@@ -145,13 +145,12 @@ final class UiPreferences extends Component implements HasActions, HasSchemas
             ->link()
             ->label(__('filament-ui-switcher::filament-ui-switcher.reset.button'))
             ->extraAttributes([
-                'aria-label' =>  __('filament-ui-switcher::filament-ui-switcher.reset.aria_label'),
+                'aria-label' => __('filament-ui-switcher::filament-ui-switcher.reset.aria_label'),
             ])
             ->icon('heroicon-o-arrow-path')
             ->requiresConfirmation()
-            ->action(fn() => $this->resetToDefaults());
+            ->action(fn () => $this->resetToDefaults());
     }
-
 
     public function render()
     {
