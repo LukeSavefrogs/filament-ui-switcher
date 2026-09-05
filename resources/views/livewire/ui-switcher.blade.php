@@ -1,10 +1,4 @@
-<div x-data="{
-        closeAndReload() {
-            // Close the modal using Livewire
-            @this.set('open', false);
-        }
-     }"
-     x-on:reload-page.window="closeAndReload()"
+<div x-on:reload-page.window="closeAndReload()"
      x-on:reset-theme-to-default.window="
         // Reset theme to system default
         localStorage.removeItem('theme');
@@ -12,54 +6,34 @@
         window.dispatchEvent(new CustomEvent('theme-changed', { detail: 'system' }));
      ">
 
-    {{-- Cog icon in topbar/sidebar --}}
-    <button
-        wire:click="toggle"
-        class="flex items-center gap-2 {{ $layout === 'sidebar-no-topbar' ? 'justify-start w-full px-3 py-2' : 'justify-center w-9 h-9' }} rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-        type="button"
-        aria-label="{{ __('filament-ui-switcher::filament-ui-switcher.button.aria_label') }}"
-    >
-        <x-filament::icon
-            icon="{{ $this->icon }}"
-            class="h-5 w-5 {{ $layout === 'sidebar-no-topbar' ? 'shrink-0' : '' }}"
-        />
-        @if($layout === 'sidebar-no-topbar')
-            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ __('filament-ui-switcher::filament-ui-switcher.modal.heading') }}
-            </span>
-        @endif
-    </button>
-
     {{-- Slideover Modal --}}
     <x-filament::modal
         id="ui-switcher-modal"
         slide-over
         close-button
         width="md"
-        :visible="$open"
-        x-on:close-modal.window="if ($event.detail.id === 'ui-switcher-modal') { $wire.set('open', false) }"
-        x-on:modal-closed.window="if ($event.detail.id === 'ui-switcher-modal') { $wire.set('open', false) }"
+        :autofocus="false"
     >
-        <x-slot name="header">
-            {{-- Reset Button --}}
+        {{-- Cog icon in topbar/sidebar --}}
+        <x-slot name="trigger">
             <button
-                wire:click="resetToDefaults"
-                wire:loading.class="opacity-50 cursor-wait"
-                wire:target="resetToDefaults"
+                class="flex items-center gap-2 {{ $layout === 'sidebar-no-topbar' ? 'justify-start w-full px-3 py-2' : 'justify-center w-9 h-9' }} rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 type="button"
-                class="fi-icon-btn absolute end-[4.5rem] top-6 flex items-center justify-center text-gray-400 hover:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:text-gray-400 transition"
-                x-tooltip="{
-                    content: '{{ __('filament-ui-switcher::filament-ui-switcher.reset.button') }}',
-                    theme: $store.theme,
-                }"
-                aria-label="{{ __('filament-ui-switcher::filament-ui-switcher.reset.aria_label') }}"
+                aria-label="{{ __('filament-ui-switcher::filament-ui-switcher.button.aria_label') }}"
             >
                 <x-filament::icon
-                    icon="heroicon-o-arrow-path"
-                    class="h-5 w-5"
+                    icon="{{ $this->icon }}"
+                    class="h-5 w-5 {{ $layout === 'sidebar-no-topbar' ? 'shrink-0' : '' }}"
                 />
+                @if($layout === 'sidebar-no-topbar')
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {{ __('filament-ui-switcher::filament-ui-switcher.modal.heading') }}
+                    </span>
+                @endif
             </button>
+        </x-slot>
 
+        <x-slot name="header">
             {{-- Header content --}}
             <div class="flex items-center gap-2">
                 <x-filament::icon
@@ -267,5 +241,11 @@
                 </div>
             </div>
         </div>
+
+        <x-slot name="footerActions">
+            {{ $this->resetAction() }}
+        </x-slot>
     </x-filament::modal>
+
+    <x-filament-actions::modals />
 </div>

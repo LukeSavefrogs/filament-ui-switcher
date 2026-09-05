@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace Andreia\FilamentUiSwitcher\Livewire;
 
 use Andreia\FilamentUiSwitcher\Support\UiPreferenceManager;
+use Filament\Actions\Action;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Schemas\Concerns\InteractsWithSchemas;
+use Filament\Schemas\Contracts\HasSchemas;
 use Livewire\Component;
 
-final class UiPreferences extends Component
+final class UiPreferences extends Component implements HasActions, HasSchemas
 {
-    public bool $open = false;
+    use InteractsWithActions;
+    use InteractsWithSchemas;
 
     public string $font = 'Inter';
 
@@ -31,24 +37,6 @@ final class UiPreferences extends Component
         $this->primaryColor = UiPreferenceManager::get('ui.color', '#6366f1');
         $this->fontSize = UiPreferenceManager::get('ui.font_size', 16);
         $this->density = UiPreferenceManager::get('ui.density', 'default');
-    }
-
-    public function toggle(): void
-    {
-        $this->open = ! $this->open;
-
-        // Dispatch Filament modal events
-        if ($this->open) {
-            $this->dispatch('open-modal', id: 'ui-switcher-modal');
-        } else {
-            $this->dispatch('close-modal', id: 'ui-switcher-modal');
-        }
-    }
-
-    public function closeModal(): void
-    {
-        $this->open = false;
-        $this->dispatch('close-modal', id: 'ui-switcher-modal');
     }
 
     public function setFont(string $font): void
@@ -149,6 +137,21 @@ final class UiPreferences extends Component
     {
         return config('ui-switcher.font_size_range', ['min' => 12, 'max' => 20]);
     }
+
+    public function resetAction(): Action
+    {
+        return Action::make('reset')
+            ->color('warning')
+            ->link()
+            ->label(__('filament-ui-switcher::filament-ui-switcher.reset.button'))
+            ->extraAttributes([
+                'aria-label' =>  __('filament-ui-switcher::filament-ui-switcher.reset.aria_label'),
+            ])
+            ->icon('heroicon-o-arrow-path')
+            ->requiresConfirmation()
+            ->action(fn() => $this->resetToDefaults());
+    }
+
 
     public function render()
     {
